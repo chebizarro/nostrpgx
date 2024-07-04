@@ -27,8 +27,8 @@ This PostgreSQL extension provides functionality for working with Nostr events. 
 3. Clone this repository and navigate to the directory:
 
     ```sh
-    git clone https://github.com/yourusername/nostr_filter_extension.git
-    cd nostr_filter_extension
+    git clone https://github.com/chebizarro/nostrpgx.git
+    cd nostrpgx
     ```
 
 4. Build the extension:
