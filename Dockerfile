@@ -29,7 +29,7 @@ WORKDIR /usr/src/nostrpgx
 RUN make
 
 # Add the extension to the PostgreSQL configuration
-RUN echo "shared_preload_libraries = 'nostr_filter'" >> /usr/share/postgresql/postgresql.conf.sample
+RUN echo "shared_preload_libraries = 'nostrpgx'" >> /usr/share/postgresql/postgresql.conf.sample
 
 # Expose the default PostgreSQL port
 EXPOSE 5432

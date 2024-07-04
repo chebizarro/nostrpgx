@@ -11,6 +11,8 @@ This PostgreSQL extension provides functionality for working with Nostr events. 
 
 ## Installation
 
+### From Source
+
 1. Ensure you have `pg_config` available and PostgreSQL development headers installed.
 2. Install dependencies using `vcpkg`:
 
@@ -48,6 +50,41 @@ This PostgreSQL extension provides functionality for working with Nostr events. 
     ```sh
     psql -d your_database -c "CREATE EXTENSION nostr_filter"
     ```
+
+### Using Docker
+
+You can build and run the PostgreSQL container with the Nostr Filter extension using Docker.
+
+#### Step-by-Step Guide
+
+1. **Ensure you have Docker installed**.
+
+2. **Clone this repository and navigate to the directory**:
+    ```sh
+    git clone https://github.com/chbizarro/nostrpgx.git
+    cd nostrpgx
+    ```
+
+3. **Build the Docker image**:
+    ```sh
+    docker build -t nostrpgx -f Dockerfile.postgres .
+    ```
+
+4. **Run the Docker container**:
+    ```sh
+    docker run --name nostrpgx -e POSTGRES_PASSWORD=example -d nostrpgx
+    ```
+
+5. **Access the PostgreSQL container**:
+    ```sh
+    docker exec -it nostrpgx psql -U postgres
+    ```
+
+6. **Create the extension in your database**:
+    ```sql
+    CREATE EXTENSION nostr_filter;
+    ```
+
 
 ## Usage
 
