@@ -1,0 +1,5 @@
+# Extension metadata
+comment = 'Nostr filter extension'
+default_version = '1.0'
+relocatable = true
+module_pathname = '$libdir/nostr_filter'

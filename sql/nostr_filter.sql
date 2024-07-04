@@ -1,0 +1,2 @@
+-- Sample SQL for setting up test data or additional configurations
+-- INSERT INTO events (id, author, kind, created_at, tags, content) VALUES (...);

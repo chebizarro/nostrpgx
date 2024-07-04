@@ -1,0 +1,22 @@
+# Compiled object files
+*.o
+*.so
+*.bc
+
+# Compiled test programs
+test_nostr_filter
+
+# Backup files
+*~
+
+# PostgreSQL extension build artifacts
+build/
+
+# Logs
+*.log
+
+# Directory for vcpkg dependencies
+vcpkg_installed/
+
+# IDE Settings
+.vscode
