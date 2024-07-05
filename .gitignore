@@ -6,8 +6,8 @@
 # Compiled test programs
 test_nostr_filter
 
-# Backup files
-*~
+# Ignore test results
+test/results/
 
 # PostgreSQL extension build artifacts
 build/
@@ -15,8 +15,10 @@ build/
 # Logs
 *.log
 
-# Directory for vcpkg dependencies
-vcpkg_installed/
-
 # IDE Settings
 .vscode
+*.swp
+*~
+
+# Ignore Docker files
+*.tar
