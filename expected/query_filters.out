@@ -1,0 +1,52 @@
+event_id | author  | kind | created_at |        content        
+----------+---------+------+------------+-----------------------
+event_id_1 | author_1 |    1 | 1625097600 | This is a test event
+(1 row)
+
+event_id | author  | kind | created_at |        content        
+----------+---------+------+------------+-----------------------
+event_id_1 | author_1 |    1 | 1625097600 | This is a test event
+(1 row)
+
+event_id | author  | kind | created_at |        content        
+----------+---------+------+------------+-----------------------
+event_id_1 | author_1 |    1 | 1625097600 | This is a test event
+(1 row)
+
+event_id | author  | kind | created_at |        content        
+----------+---------+------+------------+-----------------------
+event_id_1 | author_1 |    1 | 1625097600 | This is a test event
+event_id_2 | author_2 |    2 | 1625098600 | Another test event
+(2 rows)
+
+event_id | author  | kind | created_at |        content        
+----------+---------+------+------------+-----------------------
+event_id_1 | author_1 |    1 | 1625097600 | This is a test event
+event_id_2 | author_2 |    2 | 1625098600 | Another test event
+(2 rows)
+
+event_id | author  | kind | created_at |        content        
+----------+---------+------+------------+-----------------------
+event_id_1 | author_1 |    1 | 1625097600 | This is a test event
+event_id_2 | author_2 |    2 | 1625098600 | Another test event
+(2 rows)
+
+event_id | author  | kind | created_at |        content        
+----------+---------+------+------------+-----------------------
+event_id_1 | author_1 |    1 | 1625097600 | This is a test event
+(1 row)
+
+event_id | author  | kind | created_at |        content        
+----------+---------+------+------------+-----------------------
+event_id_1 | author_1 |    1 | 1625097600 | This is a test event
+(1 row)
+
+query_filters 
+---------------
+             1
+(1 row)
+
+event_id | author  | kind | created_at |        content        
+----------+---------+------+------------+-----------------------
+event_id_2 | author_2 |    2 | 1625098600 | Another test event
+(1 row)

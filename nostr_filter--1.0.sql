@@ -1,66 +1,27 @@
--- Create the table for storing Nostr events
-CREATE TABLE nostr_events (
+-- Create events table
+CREATE TABLE events (
     id SERIAL PRIMARY KEY,
+    event_id TEXT UNIQUE NOT NULL,
     author TEXT,
     kind INTEGER,
     created_at BIGINT,
-    tags JSONB,
     content TEXT
 );
 
--- Function to insert Nostr events
-CREATE OR REPLACE FUNCTION insert_nostr_event(
-    author TEXT,
-    kind INTEGER,
-    created_at BIGINT,
-    tags JSONB,
-    content TEXT
-) RETURNS void
-AS 'MODULE_PATHNAME', 'insert_nostr_event'
-LANGUAGE C STRICT;
+-- Create a full-text search index on the content field
+CREATE INDEX idx_content_search ON events USING GIN (to_tsvector('english', content));
 
--- Function to insert Nostr events using custom type
-CREATE OR REPLACE FUNCTION insert_nostr_event_type(
-    event nostr_event
-) RETURNS void
-AS 'MODULE_PATHNAME', 'insert_nostr_event_type'
-LANGUAGE C STRICT;
-
--- Create custom type for Nostr events
-CREATE TYPE nostr_event AS (
-    author TEXT,
-    kind INTEGER,
-    created_at BIGINT,
-    tags JSONB,
-    content TEXT
+-- Create tags table
+CREATE TABLE tags (
+    id SERIAL PRIMARY KEY,
+    event_id TEXT REFERENCES events(event_id) ON DELETE CASCADE,
+    tag_name TEXT NOT NULL,
+    tag_value TEXT NOT NULL,
+    metadata JSONB DEFAULT '{}',
+    created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
--- Function to search for Nostr events
-CREATE OR REPLACE FUNCTION nostr_filter_search(
-    filter JSONB
-) RETURNS SETOF JSONB
-AS 'MODULE_PATHNAME', 'nostr_filter_search'
-LANGUAGE C STRICT;
-
--- Test function to insert a Nostr event
-CREATE OR REPLACE FUNCTION test_insert_nostr_event()
-RETURNS void
-AS 'MODULE_PATHNAME', 'test_insert_nostr_event'
-LANGUAGE C STRICT;
-
--- Test function to retrieve a Nostr event
-CREATE OR REPLACE FUNCTION test_retrieve_nostr_event()
-RETURNS void
-AS 'MODULE_PATHNAME', 'test_retrieve_nostr_event'
-LANGUAGE C STRICT;
-
--- Test function to construct SQL query from Nostr filter
-CREATE OR REPLACE FUNCTION test_nostr_event_type()
-RETURNS void
-AS 'MODULE_PATHNAME', 'test_nostr_event_type'
-LANGUAGE C STRICT;
-
--- Call the test functions
-SELECT test_insert_nostr_event();
-SELECT test_retrieve_nostr_event();
-SELECT test_nostr_event_type();
+-- Indexes for efficient querying
+CREATE INDEX idx_tag_name ON tags(tag_name);
+CREATE INDEX idx_tag_value ON tags(tag_value);
+CREATE INDEX idx_event_id ON tags(event_id);

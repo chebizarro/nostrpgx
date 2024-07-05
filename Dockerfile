@@ -1,38 +1,50 @@
-# Use the official PostgreSQL image from the Docker Hub
-FROM postgres:latest
+# Use the official PostgreSQL image as a base
+FROM postgres:15
 
-# Install necessary build tools and dependencies
+# Install necessary packages for building extensions
 RUN apt-get update && \
     apt-get install -y \
     build-essential \
-    postgresql-server-dev-all \
-    cmake \
+    postgresql-server-dev-15 \
     git \
-    curl
+    && rm -rf /var/lib/apt/lists/*
 
-# Install vcpkg for managing dependencies
-RUN git clone https://github.com/Microsoft/vcpkg.git /vcpkg && \
-    /vcpkg/bootstrap-vcpkg.sh && \
-    /vcpkg/vcpkg integrate install && \
-    /vcpkg/vcpkg install json-c
+# Create a non-root user
+RUN useradd -ms /bin/bash pguser
 
-# Set environment variables for vcpkg
-ENV VCPKG_ROOT=/vcpkg
-ENV VCPKG_TRIPLET=x64-linux
-ENV VCPKG_INSTALLED=$VCPKG_ROOT/installed/$VCPKG_TRIPLET
+# Set environment variables
+ENV PGDATA /var/lib/postgresql/data
+ENV POSTGRES_DB testdb
+ENV POSTGRES_USER postgres
+ENV POSTGRES_PASSWORD postgres
 
-# Copy the extension source code to the container
+# Initialize the PostgreSQL data directory
+RUN mkdir -p /var/lib/postgresql/data && chown -R pguser:pguser /var/lib/postgresql
+
+# Copy the extension source code into the container
 COPY . /usr/src/nostrpgx
+
+# Set the working directory
 WORKDIR /usr/src/nostrpgx
 
+# Change ownership of the working directory to the non-root user
+RUN chown -R pguser:pguser /usr/src/nostrpgx
+
+# Switch to the non-root user
+USER pguser
+
+# Initialize the database cluster
+RUN initdb -D $PGDATA
+
+# Switch back to the root user to start PostgreSQL service
+USER root
+
 # Build the extension
-RUN make
+RUN make && make install
 
-# Add the extension to the PostgreSQL configuration
-RUN echo "shared_preload_libraries = 'nostrpgx'" >> /usr/share/postgresql/postgresql.conf.sample
+# Copy the test files to the appropriate directory
+#RUN su pguser -c mkdir -p /usr/share/postgresql/15/extension/sql/ && \
+#    cp sql/* /usr/share/postgresql/15/extension/sql/
 
-# Expose the default PostgreSQL port
-EXPOSE 5432
-
-# Start PostgreSQL server
-CMD ["postgres"]
+# Start PostgreSQL as the non-root user and run the tests
+CMD ["sh", "-c", "su pguser -c 'pg_ctl -D $PGDATA start' && sleep 5 && su pguser -c 'make installcheck' && su pguser -c 'pg_ctl -D $PGDATA stop'"]
