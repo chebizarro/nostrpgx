@@ -7,8 +7,12 @@ DATA = nostrpgx--1.0.sql \
        sql/tags/e_tag.sql \
        sql/tags/p_tag.sql
 
-OBJS = src/pg_module.o src/insert_event.o src/query_filters.o src/tag_validators.o \
-       src/tags/e_tag.o src/tags/p_tag.o
+OBJS = src/pg_module.o \
+			 src/insert_event.o \
+			 src/query_filters.o \
+			 src/tag_validators.o \
+       src/tags/e_tag.o \
+			 src/tags/p_tag.o
 
 PG_CFLAGS = -Wno-declaration-after-statement
 

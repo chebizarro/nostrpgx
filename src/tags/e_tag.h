@@ -12,21 +12,9 @@
  * limitations under the License.
  */
 
-#ifndef TAG_VALIDATORS_H
-#define TAG_VALIDATORS_H
+#ifndef E_TAG_H
+#define E_TAG_H
 
-#include "postgres.h"
-#include "fmgr.h"
-#include "utils/jsonb.h"
-
-typedef void (*tag_validator)(const char *event_id, const char *tag_value, Jsonb *metadata);
-
-typedef struct TagValidatorEntry {
-    char tag_name[16];
-    tag_validator validator;
-} TagValidatorEntry;
-
-void register_tag_validators(HTAB *tag_validator_map);
-void validate_and_index_tag(const char *event_id, const char *tag_name, const char *tag_value, Jsonb *metadata);
+void register_e_tag_validator(HTAB *tag_validator_map);
 
 #endif

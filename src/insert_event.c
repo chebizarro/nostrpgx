@@ -81,7 +81,7 @@ Datum insert_event(PG_FUNCTION_ARGS) {
 
     SPI_exec(insert_event_sql, 0);
 
-    JsonbIterator *tags_it = JsonbIteratorInit(&tags_jsonb->root); // Fix the type here
+    JsonbIterator *tags_it = JsonbIteratorInit(&tags_jsonb->root);
     JsonbValue tag;
     while ((type = JsonbIteratorNext(&tags_it, &tag, false)) != WJB_DONE) {
         if (type == WJB_ELEM) {
@@ -91,7 +91,7 @@ Datum insert_event(PG_FUNCTION_ARGS) {
                 JsonbParseState *state = NULL;
                 JsonbValue *metadata = NULL;
 
-                JsonbIterator *tag_it = JsonbIteratorInit(tag.val.binary.data); // Correctly use the raw array
+                JsonbIterator *tag_it = JsonbIteratorInit(tag.val.binary.data);
                 JsonbValue tag_elem;
                 int tag_elem_index = 0;
 

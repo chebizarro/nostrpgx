@@ -2,4 +2,4 @@
 comment = 'A PostgreSQL extension for handling Nostr events and filters'
 default_version = '1.0'
 relocatable = true
-module_pathname = '$libdir/nostr_extension'
+module_pathname = '$libdir/nostrpgx'
