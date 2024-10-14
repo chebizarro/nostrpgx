@@ -15,3 +15,14 @@ CREATE TYPE tag AS (
     metadata jsonb
 );
 
+CREATE TYPE nostrpgx.filter AS (
+    ids text[],
+    authors text[],
+    kinds int[],
+    e_tags text[],
+    p_tags text[],
+    since timestamp,
+    until timestamp,
+    limit int,
+    search text
+);

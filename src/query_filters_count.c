@@ -21,11 +21,11 @@
 
 extern char* construct_query(ArrayType *filters_array, bool is_count);
 
-PG_FUNCTION_INFO_V1(query_filters);
+PG_FUNCTION_INFO_V1(query_filters_count);
 
-Datum query_filters(PG_FUNCTION_ARGS) {
+Datum query_filters_count(PG_FUNCTION_ARGS) {
     ArrayType *filters_array = PG_GETARG_ARRAYTYPE_P(0);
-    char *sql = construct_query(filters_array, false);
+    char *sql = construct_query(filters_array, true);
 
     if (sql == NULL) {
         PG_RETURN_NULL();
@@ -38,23 +38,9 @@ Datum query_filters(PG_FUNCTION_ARGS) {
         ereport(ERROR, (errmsg("Error executing query: %s", sql)));
     }
 
-    TupleDesc tupdesc = SPI_tuptable->tupdesc;
-    int num_tuples = SPI_processed;
-
-    JsonbParseState *state = NULL;
-    JsonbValue *result = pushJsonbValue(&state, WJB_BEGIN_ARRAY, NULL);
-
-    for (int i = 0; i < num_tuples; i++) {
-        HeapTuple tuple = SPI_tuptable->vals[i];
-        Datum datum = heap_getattr(tuple, 1, tupdesc, NULL);
-        Jsonb *jsonb = DatumGetJsonbP(datum);
-        result = pushJsonbValue(&state, WJB_ELEM, &jsonb->root);
-    }
-
-    result = pushJsonbValue(&state, WJB_END_ARRAY, NULL);
-    Jsonb *jsonb_result = JsonbValueToJsonb(result);
+    int64 count = DatumGetInt64(SPI_getbinval(SPI_tuptable->vals[0], SPI_tuptable->tupdesc, 1, NULL));
 
     SPI_finish();
 
-    PG_RETURN_JSONB_P(jsonb_result);
+    PG_RETURN_INT64(count);
 }
